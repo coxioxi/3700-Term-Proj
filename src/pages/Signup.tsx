@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import '../Login_Signup.css';
+import { supabase } from "../components/supabase_client";
+import { useNavigate } from "react-router-dom";
+import '../styles/Login_Signup.css';
 
 export default function Signup() {
+  const navigate = useNavigate();  
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
 
-  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+  async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (password !== repeatPassword) {
@@ -17,8 +21,21 @@ export default function Signup() {
     }
 
     console.log("Signing up with:", { username, email, password, repeatPassword });
-    // TODO: Add your signup logic here (e.g., Supabase)
-  };
+
+    // Supabase signup
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { username } }
+    });
+
+    if (error) {
+      alert("Error signing up: " + (error.message ?? "Unknown error"));
+    } else {
+      alert("Signup successful! Please check your email to confirm your account.");
+      navigate("/login");  
+    }
+  }
 
   return (
     <div className="wrapper">

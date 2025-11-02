@@ -1,15 +1,29 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import '../Login_Signup.css'
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../components/supabase_client";
+import '../styles/Login_Signup.css'
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  async function handleLogin (e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log("Logging in with:", { email, password });
-    // TODO: Add your login logic here (e.g., Supabase)
+    // Attempt to sign in with Supabase
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      alert("Error logging in: " + error.message);
+    } else {
+      alert("Login successful!");
+      navigate("/dashboard");
+    }
   };
 
   return (

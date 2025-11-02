@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import '../Login_Signup.css';
+import '../styles/Login_Signup.css';
 
 export default function Gate() {
   const navigate = useNavigate();
