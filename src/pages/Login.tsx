@@ -83,6 +83,9 @@ export default function Login() {
       <p>
         Don’t have an account? <Link to="/signup">Sign Up</Link>
       </p>
+      <p>
+        Forgot your password? <Link to="/reset_password">Reset Password</Link>
+      </p>
     </div>
   );
 }
