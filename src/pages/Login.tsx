@@ -21,7 +21,6 @@ export default function Login() {
     if (error) {
       alert("Error logging in: " + error.message);
     } else {
-      alert("Login successful!");
       navigate("/dashboard");
     }
   };
