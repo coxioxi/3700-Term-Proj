@@ -1,3 +1,8 @@
+/**
+ * Dashboard Page
+ * Allows users to view their dashboard and logout of their account.
+ */
+
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../components/supabase_client";
@@ -19,8 +24,8 @@ export default function Dashboard() {
     return () => window.removeEventListener('click', handleClickOutside);
   }, []);
 
+  // Logout function
   async function handleLogout() {
-    // Implement logout functionality here
     const { error } = await supabase.auth.signOut({ scope: 'local' });
     if (error) {
       alert("Error logging out: " + error.message);
@@ -29,6 +34,12 @@ export default function Dashboard() {
     } 
   }
 
+  async function importSchedule() {
+    // Placeholder for import schedule functionality
+    
+  }
+
+  // Dashboard UI
   return (
     <div className="container">
       <div className="navbar">
@@ -58,6 +69,10 @@ export default function Dashboard() {
       <div className="sidebar">
         <h1>Dashboard</h1>
         <p>Welcome to your dashboard!</p>
+
+        <div className="button-group">
+          <button onClick={importSchedule}>Import Schedule</button>
+        </div>
       </div>
     </div>
   );

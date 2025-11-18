@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { supabase } from "../components/supabase_client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import '../styles/Login_Signup.css';
 
 export default function Signup() {
   const navigate = useNavigate();  
-
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,20 +17,24 @@ export default function Signup() {
       return;
     }
 
-    console.log("Signing up with:", { username, email, password, repeatPassword });
+    try {
+      const res = await fetch('http://localhost:5000/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
+      });
 
-    // Supabase signup
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { username } }
-    });
+      const data = await res.json();
 
-    if (error) {
-      alert("Error signing up: " + (error.message ?? "Unknown error"));
-    } else {
-      alert("Signup successful! Please check your email to confirm your account.");
-      navigate("/login");  
+      if (res.ok) {
+        alert(data.message);
+        navigate("/login");
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error!");
     }
   }
 
@@ -42,103 +43,41 @@ export default function Signup() {
       <h1>Create Your Account</h1>
       <form onSubmit={handleSignup}>
         {/* Username */}
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
         <div>
-          <label htmlFor="username"></label>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-person-fill"
-            viewBox="0 0 16 16"
-          >
-            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-          </svg>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Email */}
-        <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-envelope-fill"
-            viewBox="0 0 16 16"
-          >
-            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zm6.761 3.396L16 11.801V4.697l-9.239 6.396zm-.761.577L0 12.601A2 2 0 0 0 2 14h12a2 2 0 0 0 2-1.399l-7.761-4.928z" />
-          </svg>
+          {/* Email */}
           <input
             type="email"
-            id="email"
-            name="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </div>
-
-        {/* Password */}
-        <div>
-          <label htmlFor="password"></label>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-lock-fill"
-            viewBox="0 0 16 16"
-          >
-            <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9zm8-3V4a3 3 0 0 0-6 0v2h6z" />
-          </svg>
+          {/* Password */}
           <input
             type="password"
-            id="password"
-            name="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
-
-        {/* Repeat Password */}
-        <div>
-          <label htmlFor="repeat-password"></label>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            className="bi bi-lock-fill"
-            viewBox="0 0 16 16"
-          >
-            <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9zm8-3V4a3 3 0 0 0-6 0v2h6z" />
-          </svg>
+          {/* Repeat Password */}
           <input
             type="password"
-            id="repeat-password"
-            name="repeat-password"
             placeholder="Repeat Password"
             value={repeatPassword}
             onChange={(e) => setRepeatPassword(e.target.value)}
             required
           />
         </div>
-
         <button type="submit">Sign Up</button>
       </form>
-
       <p>
         Already have an account? <Link to="/login">Log In</Link>
       </p>

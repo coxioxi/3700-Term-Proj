@@ -1,29 +1,50 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { supabase } from "../components/supabase_client";
 import '../styles/Login_Signup.css';
 
 export default function Gate() {
   const [email, setEmail] = useState("");
-  
-  async function handleResetPassword(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    
-    // Reset password logic goes here
-    await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/New_Password`,
-    });
+  const [password, setPassword] = useState(""); // optional if you want to verify current password
+  const navigate = useNavigate();
 
-    alert("If an account with that email exists, you'll receive a password reset link.");
+  async function handleCheckAndReset(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (!email) {
+      alert("Please enter your email.");
+      return;
+    }
+
+    try {
+      // Call backend to check if user exists
+      const res = await fetch("http://localhost:5000/check-credentials", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: "" }) // empty password just to validate email exists
+      });
+
+      const data = await res.json();
+
+      if (!data.valid) {
+        alert("No account found with that email.");
+        return;
+      }
+
+      // Navigate to New Password page, passing email as state
+      navigate("/New_Password", { state: { email } });
+
+    } catch (err) {
+      console.error(err);
+      alert("Server error. Please try again later.");
+    }
   }
 
   return (
     <div className="wrapper">
       <h1>Recover Password</h1>
-      <h2>Please enter your email address below and we will send you a confirmation email.</h2>
-      <form onSubmit={handleResetPassword}>
-        {/* Email field */}
+      <h2>Please enter your email address below to reset your password.</h2>
+      <form onSubmit={handleCheckAndReset}>
         <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
