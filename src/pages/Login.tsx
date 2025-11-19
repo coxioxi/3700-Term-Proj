@@ -39,12 +39,11 @@ export default function Login() {
   }
 
   return (
-    <div className="backImage">
-      <div className="wrapper">
+    <div className="login-page">
+      <div className="form-container">
         <h1>Login</h1>
         <form onSubmit={handleLogin}>
-          {/* Email field */}
-          <div>
+          <div className="input-group">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-envelope-fill" viewBox="0 0 16 16">
               <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zm6.761 3.396L16 11.801V4.697l-9.239 6.396zm-.761.577L0 12.601A2 2 0 0 0 2 14h12a2 2 0 0 0 2-1.399l-7.761-4.928z" />
             </svg>
@@ -57,8 +56,7 @@ export default function Login() {
             />
           </div>
 
-          {/* Password field */}
-          <div>
+          <div className="input-group">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-lock-fill" viewBox="0 0 16 16">
               <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9zm8-3V4a3 3 0 0 0-6 0v2h6z" />
             </svg>

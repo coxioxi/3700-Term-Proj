@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); 
 
 :root {
     --accent-color: #098d3c;
@@ -7,26 +7,48 @@
     --input-color: #000000;
 }
 
-html {
-    font-family: Poppins, 'Segoe UI', sans-serif;
-    font-size: 12px;
-    text-align: center;
-}
-
-.wrapper {
-    background-color: rgb(0, 0, 0);
+/* Only for login/signup pages */
+.login-page, .signup-page {
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;     /* center vertically */
     height: 100vh;
-    width: max(30%, 300px);
-    padding: 10px;
-    border-radius: 0 20px 20px 0;
+    background-color: rgb(0, 0, 0);
 }
 
+/* Form container (formerly .wrapper) */
+.form-container {
+    background-color: rgb(0, 0, 0);
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px; /* allows it to grow on larger screens but stay reasonable */
+    box-sizing: border-box;
+}
+
+
+/* Container for the form */
+.form-container {
+    background-color: #242424; /* semi-transparent black */
+    color: white;
+    padding: 40px;
+    border-radius: 20px;
+    width: 350px;
+    max-width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}
+
+/* Center the form in the screen */
 .backImage {
     background-image: url('../assets/beach.jpg');
     background-size: cover;
     background-position: center;
     height: 100vh;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
 }
+

@@ -24,10 +24,9 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  /* removed global flex so dashboard fills the screen correctly */
 }
 
 h1 {
@@ -65,4 +64,23 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Global reset for layout */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Poppins, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    text-align: center;
+    background-color: #000; /* optional global background */
+    display: block; /* reset flex from login page */
+}
+
+/* Login / Signup page centering */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }

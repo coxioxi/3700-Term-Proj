@@ -1,15 +1,16 @@
-/**
- * Dashboard Page
- * Allows users to view their dashboard and logout of their account.
- */
-
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../components/supabase_client";
 import '../styles/Home_Page.css';
 
+// Import the separate page components
+import ViewSchedule from "./view-schedule";
+import Finances from "./finances";
+import ImportSchedule from "./import-file";
+
 export default function Dashboard() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [activePage, setActivePage] = useState<"import" | "view" | "finances">("import");
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -34,29 +35,44 @@ export default function Dashboard() {
     } 
   }
 
-  async function importSchedule() {
-    // Placeholder for import schedule functionality
-    
-  }
+  // Render the active page
+  const renderContent = () => {
+    switch (activePage) {
+      case "import":
+        return <ImportSchedule />;
+      case "view":
+        return <ViewSchedule />;
+      case "finances":
+        return <Finances />;
+      default:
+        return null;
+    }
+  };
 
-  // Dashboard UI
   return (
-    <div className="container">
+    <div className="dashboard-container">
+      {/* Top Navbar */}
       <div className="navbar">
-        <h2></h2>
+        <div className="nav-left">
+          <h2>Dashboard</h2>
+        </div>
+        <div className="nav-center">
+          <button onClick={() => setActivePage("import")} className={activePage === "import" ? "active" : ""}>
+            Import Schedule
+          </button>
+          <button onClick={() => setActivePage("view")} className={activePage === "view" ? "active" : ""}>
+            View Schedule
+          </button>
+          <button onClick={() => setActivePage("finances")} className={activePage === "finances" ? "active" : ""}>
+            Finances
+          </button>
+        </div>
         <div className="profile-menu" ref={menuRef}>
           <button 
             className="profile-button" 
             onClick={() => setDropdownOpen(prev => !prev)}
           >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              height="24px" viewBox="0 -960 960 960" 
-              width="24px" 
-              fill="#e3e3e3"
-            >
-              <path d="M560-680v-80h320v80H560Zm0 160v-80h320v80H560Zm0 160v-80h320v80H560Zm-240-40q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM80-160v-76q0-21 10-40t28-30q45-27 95.5-40.5T320-360q56 0 106.5 13.5T522-306q18 11 28 30t10 40v76H80Zm86-80h308q-35-20-74-30t-80-10q-41 0-80 10t-74 30Zm154-240q17 0 28.5-11.5T360-520q0-17-11.5-28.5T320-560q-17 0-28.5 11.5T280-520q0 17 11.5 28.5T320-480Zm0-40Zm0 280Z"/>
-            </svg>
+            Profile
           </button>
           {dropdownOpen && (
             <div className="dropdown-content">
@@ -66,13 +82,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="sidebar">
-        <h1>Dashboard</h1>
-        <p>Welcome to your dashboard!</p>
-
-        <div className="button-group">
-          <button onClick={importSchedule}>Import Schedule</button>
-        </div>
+      {/* Content Area */}
+      <div className="dashboard-content">
+        {renderContent()}
       </div>
     </div>
   );

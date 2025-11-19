@@ -1,37 +1,48 @@
 :root {
-    --sidebar-width: max(20%, 340px);
-    --navbar-width: calc(100% - var(--sidebar-width));
+    --navbar-height: 100px;
 }
 
-.sidebar {
-    background-color: rgb(0, 0, 0);
-    height: 100vh;
-    width: var(--sidebar-width);
-    border-right: 1px solid white;
+/* Top Navbar */
+.navbar {
+    background-color: rgba(0, 0, 0);
+    height: var(--navbar-height);
+    padding: 10px 20px;
+    border-bottom: 1px solid white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: fixed;
     top: 0;
     left: 0;
-}
-
-.navbar {
-    background-color: rgba(0, 0, 0);
-    height: 100px;
-    padding: 10px;
-    border-bottom: 1px solid white;
-    position: fixed;
-    top: 0;
-    left: var(--sidebar-width);
     right: 0;
-    display: flex;
-    justify-content: flex-end; /* profile icon on right */
-    align-items: center;
-    z-index: 100; /* make sure dropdown is above */
+    z-index: 100;
+    color: white;
 }
 
+/* Navbar center buttons */
+.nav-center {
+    display: flex;
+    gap: 20px;
+}
 
+.nav-center button {
+    background: none;
+    border: 2px solid white;
+    padding: 8px 16px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.nav-center button.active {
+    background-color: white;
+    color: black;
+}
+
+/* Profile menu */
 .profile-menu {
-    position: relative; /* important for dropdown */
-    display: inline-block;
+    position: relative;
 }
 
 .profile-button {
@@ -48,8 +59,8 @@
 
 .dropdown-content {
     position: absolute;
-    top: 60px; /* below the navbar */
-    right: 0;  /* align to right edge of profile icon */
+    top: 60px;
+    right: 0;
     background-color: black;
     min-width: 200px;
     box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
@@ -58,13 +69,47 @@
     flex-direction: column;
 }
 
-.dropdown-content a {
+.dropdown-content button {
     color: white;
     padding: 12px 16px;
-    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
 }
 
-.dropdown-content a:hover {
+.dropdown-content button:hover {
     background-color: #575757;
 }
+
+/* Dashboard container */
+.dashboard-container {
+    width: 100%;
+    min-height: 100vh;
+    padding-top: var(--navbar-height); /* offset for fixed navbar */
+    background-color: #111;
+    color: white;
+    box-sizing: border-box;
+}
+
+/* Ensures the page content fills the area under the navbar and centers it */
+.dashboard-content {
+    width: 100%;
+    min-height: calc(100vh - var(--navbar-height));
+    display: flex;
+    justify-content: center; /* vertical center */
+    align-items: center;     /* horizontal center */
+    text-align: center;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+/* Optional: add a class for content inside pages */
+.page-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
 
