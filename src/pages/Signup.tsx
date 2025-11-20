@@ -8,6 +8,9 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
+  const [companyPhone, setCompanyPhone] = useState("");
 
   async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -21,7 +24,7 @@ export default function Signup() {
       const res = await fetch('http://localhost:5000/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, email, password, companyName, companyAddress, companyPhone })
       });
 
       const data = await res.json();
@@ -83,6 +86,39 @@ export default function Signup() {
               placeholder="Repeat Password"
               value={repeatPassword}
               onChange={(e) => setRepeatPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Company Name*/}
+          <div className="input-group">
+            <input
+              type="companyName"
+              placeholder="Company Name"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Company Address */}
+          <div className="input-group">
+            <input
+              type="companyAddress"
+              placeholder="Company Address"
+              value={companyAddress}
+              onChange={(e) => setCompanyAddress(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Compnay PhoneNumber */}
+          <div className="input-group">
+            <input
+              type="CompanyPhone"
+              placeholder="Company Phone Number"
+              value={companyPhone}
+              onChange={(e) => setCompanyPhone(e.target.value)}
               required
             />
           </div>
