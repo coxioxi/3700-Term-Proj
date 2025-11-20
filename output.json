@@ -1,0 +1,204 @@
+{
+  "employees": [
+    {
+      "name": "Bob Hall",
+      "phone": "(969)-348-6896",
+      "address": "150 Main St, Cityville",
+      "payRate": 24.68,
+      "role": "Supervisor",
+      "hoursWorked": 27,
+      "team": "Team A"
+    },
+    {
+      "name": "Alice Hall",
+      "phone": "(898)-696-5854",
+      "address": "794 Oak Ave, Cityville",
+      "payRate": 19.75,
+      "role": "Cleaner",
+      "hoursWorked": 24,
+      "team": "Team A"
+    },
+    {
+      "name": "George Clark",
+      "phone": "(674)-422-2118",
+      "address": "995 Pine Rd, Cityville",
+      "payRate": 41.98,
+      "role": "Manager",
+      "hoursWorked": 41,
+      "team": "Team B"
+    },
+    {
+      "name": "Charlie Hall",
+      "phone": "(658)-847-7154",
+      "address": "380 Cedar Ln, Cityville",
+      "payRate": 44.87,
+      "role": "Supervisor",
+      "hoursWorked": 26,
+      "team": "Team B"
+    },
+    {
+      "name": "Diana Taylor",
+      "phone": "(161)-370-2580",
+      "address": "263 Oak Ave, Cityville",
+      "payRate": 39.84,
+      "role": "Cleaner",
+      "hoursWorked": 45,
+      "team": "Team C"
+    },
+    {
+      "name": "Diana Taylor",
+      "phone": "(769)-734-6464",
+      "address": "993 Pine Rd, Cityville",
+      "payRate": 39.25,
+      "role": "Cleaner",
+      "hoursWorked": 24,
+      "team": "Team C"
+    }
+  ],
+  "clients": [
+    {
+      "name": "George Hall",
+      "address": "923 Maple Dr, Cityville",
+      "cleaningValue": 58.46,
+      "houseSize": 3517,
+      "paymentMethod": "Cash",
+      "dayOfCleaning": "2025-12-04",
+      "timeOfCleaning": "08:50",
+      "specialRequest": "Focus on bathrooms",
+      "typeClean": false,
+      "team": "Team A"
+    },
+    {
+      "name": "Charlie Smith",
+      "address": "661 Maple Dr, Cityville",
+      "cleaningValue": 203.99,
+      "houseSize": 1630,
+      "paymentMethod": "Cash",
+      "dayOfCleaning": "2025-12-04",
+      "timeOfCleaning": "04:36",
+      "specialRequest": "Use eco-friendly products",
+      "typeClean": true,
+      "team": "Team A"
+    },
+    {
+      "name": "Alice Smith",
+      "address": "527 Maple Dr, Cityville",
+      "cleaningValue": 265.67,
+      "houseSize": 1717,
+      "paymentMethod": "Credit Card",
+      "dayOfCleaning": "2025-12-02",
+      "timeOfCleaning": "07:25",
+      "specialRequest": "Include garage cleaning",
+      "typeClean": true,
+      "team": "Team A"
+    },
+    {
+      "name": "Alice Lee",
+      "address": "414 Main St, Cityville",
+      "cleaningValue": 246.78,
+      "houseSize": 1696,
+      "paymentMethod": "Check",
+      "dayOfCleaning": "2025-12-09",
+      "timeOfCleaning": "11:59",
+      "specialRequest": "Include garage cleaning",
+      "typeClean": false,
+      "team": "Team A"
+    },
+    {
+      "name": "Ethan Brown",
+      "address": "750 Cedar Ln, Cityville",
+      "cleaningValue": 351.45,
+      "houseSize": 1493,
+      "paymentMethod": "Cash",
+      "dayOfCleaning": "2025-12-15",
+      "timeOfCleaning": "10:24",
+      "specialRequest": "Include garage cleaning",
+      "typeClean": false,
+      "team": "Team B"
+    },
+    {
+      "name": "Charlie Johnson",
+      "address": "621 Cedar Ln, Cityville",
+      "cleaningValue": 163.53,
+      "houseSize": 2253,
+      "paymentMethod": "Check",
+      "dayOfCleaning": "2025-11-28",
+      "timeOfCleaning": "13:08",
+      "specialRequest": "Focus on bathrooms",
+      "typeClean": true,
+      "team": "Team B"
+    },
+    {
+      "name": "Alice Lee",
+      "address": "973 Oak Ave, Cityville",
+      "cleaningValue": 430.91,
+      "houseSize": 1952,
+      "paymentMethod": "Check",
+      "dayOfCleaning": "2025-11-30",
+      "timeOfCleaning": "13:15",
+      "specialRequest": "Use eco-friendly products",
+      "typeClean": true,
+      "team": "Team B"
+    },
+    {
+      "name": "Bob Clark",
+      "address": "221 Pine Rd, Cityville",
+      "cleaningValue": 125.64,
+      "houseSize": 2616,
+      "paymentMethod": "Online Payment",
+      "dayOfCleaning": "2025-11-21",
+      "timeOfCleaning": "11:43",
+      "specialRequest": "Use eco-friendly products",
+      "typeClean": true,
+      "team": "Team B"
+    },
+    {
+      "name": "Alice Clark",
+      "address": "799 Maple Dr, Cityville",
+      "cleaningValue": 237.06,
+      "houseSize": 2810,
+      "paymentMethod": "Cash",
+      "dayOfCleaning": "2025-12-17",
+      "timeOfCleaning": "09:54",
+      "specialRequest": "Include garage cleaning",
+      "typeClean": true,
+      "team": "Team C"
+    },
+    {
+      "name": "Fiona Clark",
+      "address": "643 Main St, Cityville",
+      "cleaningValue": 101.33,
+      "houseSize": 3149,
+      "paymentMethod": "Online Payment",
+      "dayOfCleaning": "2025-12-03",
+      "timeOfCleaning": "09:37",
+      "specialRequest": "Include garage cleaning",
+      "typeClean": true,
+      "team": "Team C"
+    },
+    {
+      "name": "Fiona Johnson",
+      "address": "561 Cedar Ln, Cityville",
+      "cleaningValue": 456.13,
+      "houseSize": 3165,
+      "paymentMethod": "Online Payment",
+      "dayOfCleaning": "2025-12-15",
+      "timeOfCleaning": "11:21",
+      "specialRequest": "None",
+      "typeClean": true,
+      "team": "Team C"
+    },
+    {
+      "name": "Fiona Johnson",
+      "address": "961 Maple Dr, Cityville",
+      "cleaningValue": 404.15,
+      "houseSize": 3458,
+      "paymentMethod": "Online Payment",
+      "dayOfCleaning": "2025-12-13",
+      "timeOfCleaning": "11:19",
+      "specialRequest": "Use eco-friendly products",
+      "typeClean": true,
+      "team": "Team C"
+    }
+  ]
+}
