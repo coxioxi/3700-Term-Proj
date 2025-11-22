@@ -7,6 +7,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import multer from 'multer';
 import XLSX from 'xlsx';
+import jwt from 'jsonwebtoken';
 import fs from 'fs';
 
 dotenv.config();
@@ -15,15 +16,31 @@ app.use(cors());
 app.use(express.json());
 const upload = multer({ storage: multer.memoryStorage() });
 
+// Middleware to authenticate JWT tokens
+function authMiddleware(req: any, res: any, next: any) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) return res.status(401).json({ message: "No token provided" });
+
+  const token = authHeader.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "Invalid token format" });
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!, (err: any, user: any) => {
+    if (err) return res.status(403).json({ message: "Invalid or expired token" });
+    req.user = user; // attaches decoded token to request
+    next();
+  });
+}
+
+
 // MySQL connection pool
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'samuel',
-    password: "<91233553So>",
+    password: process.env.DB_PASSWORD,
     database: 'CleaningCompany'
 });
 
-// ================= Signup Endpoint =================
+// Signup Endpoint 
 app.post('/signup', async (req, res) => {
     const { username, email, password, companyName, companyAddress, companyPhone } = req.body;
 
@@ -62,61 +79,91 @@ app.post('/signup', async (req, res) => {
 });
 
 
-// ================= Login Endpoint =================
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+// Login Endpoint
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Missing fields' });
+  if (!email || !password) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  try {
+    const [rows] = await pool.query<RowDataPacket[]>(
+      "SELECT * FROM administrator WHERE email = ?",
+      [email]
+    );
+
+    if (rows.length === 0) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    try {
-        const [rows] = await pool.query<RowDataPacket[]>(
-            'SELECT * FROM administrator WHERE email = ?',
-            [email]
-        );
+    const user = rows[0];
 
-        if (rows.length === 0) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-
-        const user = rows[0];
-        const match = await bcrypt.compare(password, user.password);
-
-        if (!match) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-
-        res.status(200).json({ message: 'Login successful', username: user.name });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Database error' });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
+
+    // Create a JWT with ONLY SAFE FIELDS
+    const payload = {
+      adminID: user.adminID,
+      username: user.name,
+      email: user.email,
+    };
+
+    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {
+      expiresIn: "1d",
+    });
+
+    res.json({
+      message: "Login successful",
+      token: accessToken,
+      username: user.name,
+      adminID: user.adminID,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Database error" });
+  }
 });
 
 
+
+// Excel Upload Endpoint
 // ================= Excel Upload Endpoint =================
-app.post("/upload-xlsx", upload.single("file"), async (req, res) => {
+app.post("/upload-xlsx", authMiddleware, upload.single("file"), async (req: any, res) => {
   if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
   try {
-    // 1️⃣ For simplicity, assume companyID = 5 (in real app, derive from auth)
-    const companyID = 6;
+    // Get admin ID from JWT
+    const adminID = req.user.adminID;
 
-    // 3️⃣ Read the workbook from the uploaded file
+    // Get the companyID that belongs to this admin
+    const [companyRows] = await pool.query<any[]>(
+      "SELECT companyID FROM company WHERE adminID = ?",
+      [adminID]
+    );
+
+    if (companyRows.length === 0) {
+      return res.status(404).json({ message: "Company not found for this user" });
+    }
+
+    const companyID = companyRows[0].companyID;
+
+    // Parse spreadsheet
     const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
     const { employees, clients } = parseWorkbook(workbook);
 
-    // 4️⃣ Start a transaction and insert teams, employees, clients
+    // Begin DB transaction
     const connection = await pool.getConnection();
     await connection.beginTransaction();
 
     try {
       const teamMap: Record<string, number> = {};
 
+      // Insert teams + employees
       for (const emp of employees) {
         if (!teamMap[emp.team]) {
-          // Insert team associated with this company
           const [teamResult]: any = await connection.query(
             "INSERT INTO team (name, companyID) VALUES (?, ?)",
             [emp.team, companyID]
@@ -124,7 +171,6 @@ app.post("/upload-xlsx", upload.single("file"), async (req, res) => {
           teamMap[emp.team] = teamResult.insertId;
         }
 
-        // Insert employee with the correct teamID
         await connection.query(
           "INSERT INTO employee (name, phoneNum, address, payRate, role, hoursWorked, teamID) VALUES (?, ?, ?, ?, ?, ?, ?)",
           [
@@ -134,12 +180,12 @@ app.post("/upload-xlsx", upload.single("file"), async (req, res) => {
             emp.payRate,
             emp.role,
             emp.hoursWorked,
-            teamMap[emp.team],
+            teamMap[emp.team]
           ]
         );
       }
 
-      // Similarly, insert clients referencing the correct teamID
+      // Insert clients
       for (const client of clients) {
         const teamID = teamMap[client.team];
         await connection.query(
@@ -156,13 +202,14 @@ app.post("/upload-xlsx", upload.single("file"), async (req, res) => {
             client.timeOfCleaning,
             client.specialRequest,
             client.typeClean,
-            teamID,
+            teamID
           ]
         );
       }
 
       await connection.commit();
       connection.release();
+
       res.json({ message: "File processed and data saved successfully" });
     } catch (err) {
       await connection.rollback();
@@ -177,7 +224,8 @@ app.post("/upload-xlsx", upload.single("file"), async (req, res) => {
 });
 
 
-// ================= Check Credentials Endpoint =================
+
+// Check Credentials Endpoint
 app.post('/check-credentials', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ valid: false, message: "Missing fields" });
@@ -200,7 +248,7 @@ app.post('/check-credentials', async (req, res) => {
     }
 });
 
-// ================= Reset Password Endpoint =================
+// Reset Password Endpoint
 app.post('/reset-password', async (req, res) => {
     const { email, newPassword } = req.body;
     if (!email || !newPassword) return res.status(400).json({ message: "Missing fields" });

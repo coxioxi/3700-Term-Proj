@@ -26,13 +26,12 @@ export default function Dashboard() {
   }, []);
 
   // Logout function
-  async function handleLogout() {
-    const { error } = await supabase.auth.signOut({ scope: 'local' });
-    if (error) {
-      alert("Error logging out: " + error.message);
-    } else {
-      navigate("/login");
-    } 
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("companyID");
+
+    navigate("/login");
   }
 
   // Render the active page

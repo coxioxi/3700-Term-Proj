@@ -8,35 +8,41 @@ export default function Login() {
   const navigate = useNavigate();
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!email || !password) {
-      alert("Please enter both email and password");
+  if (!email || !password) {
+    alert("Please enter both email and password");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Login failed");
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      });
+    // Save the token and user info
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("username", data.username);
+    localStorage.setItem("adminID", data.adminID);
 
-      const data = await response.json();
+    alert(`Welcome, ${data.username}!`);
 
-      if (!response.ok) {
-        alert(data.message || "Login failed");
-      } else {
-        alert(`Welcome, ${data.username}!`);
-        navigate("/dashboard");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error connecting to the server");
-    }
+    navigate("/dashboard");
+  } catch (err) {
+    console.error(err);
+    alert("Error connecting to the server");
   }
+}
+
 
   return (
     <div className="login-page">
