@@ -8,7 +8,6 @@ import dotenv from 'dotenv';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
 
 dotenv.config();
 const app = express();
@@ -31,7 +30,6 @@ function authMiddleware(req: any, res: any, next: any) {
   });
 }
 
-
 // MySQL connection pool
 const pool = mysql.createPool({
     host: 'localhost',
@@ -51,13 +49,22 @@ app.post('/signup', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        const [rows] = await pool.query<RowDataPacket[]>(
+          "SELECT * FROM administrator WHERE email = ?",
+          [email]
+        );
+
+        if (rows.length !== 0) {
+          return res.status(401).json({ message: "This email is already being used" });
+        }
+
         // Insert admin and get ID
         const [adminResult]: any = await pool.query(
             'INSERT INTO administrator (name, email, password) VALUES (?, ?, ?)',
             [username, email, hashedPassword]
         );
 
-        const adminID = adminResult.insertId;  // <-- THE IMPORTANT PART
+        const adminID = adminResult.insertId; 
 
         // Insert company with foreign key
         await pool.query(
@@ -130,7 +137,6 @@ app.post("/login", async (req, res) => {
 
 
 // Excel Upload Endpoint
-// ================= Excel Upload Endpoint =================
 app.post("/upload-xlsx", authMiddleware, upload.single("file"), async (req: any, res) => {
   if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
