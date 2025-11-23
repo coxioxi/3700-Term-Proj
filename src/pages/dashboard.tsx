@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../components/supabase_client";
 import '../styles/Home_Page.css';
 
 // Import the separate page components

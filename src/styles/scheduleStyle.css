@@ -1,0 +1,144 @@
+/* ================= Overall Page Layout ================= */
+.schedule-page {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #161616;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* ================= Left Section: Schedule View ================= */
+.schedule-view {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Team Dropdown */
+.team-selector {
+  margin-bottom: 1rem;
+}
+
+.team-selector label {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.team-selector select {
+  padding: 0.3rem 0.5rem;
+  font-size: 1rem;
+}
+
+/* Weekly Schedule Table */
+.weekly-schedule {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #161616;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.weekly-schedule th,
+.weekly-schedule td {
+  border: 1px solid #ffffff;
+  padding: 0.5rem;
+  text-align: center;
+  min-width: 80px;
+}
+
+.weekly-schedule th {
+  background-color: #161616;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Highlight the time column */
+.weekly-schedule td:first-child {
+  font-weight: bold;
+  background-color: #161616;
+}
+
+/* Scrollable table body if it grows too tall */
+.weekly-schedule tbody {
+  display: block;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.weekly-schedule thead,
+.weekly-schedule tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* ================= Right Section: Client Checklist ================= */
+.client-checklist {
+  flex: 1;
+  margin-left: 1rem;
+  background-color: #161616;
+  padding: 1rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.client-checklist h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.client-checklist ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.client-checklist li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+}
+
+.client-checklist li:last-child {
+  border-bottom: none;
+}
+
+.client-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+
+.client-name {
+  font-weight: bold;
+}
+
+.client-phone {
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+/* Send SMS button styling */
+.client-checklist button {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.client-checklist button:hover {
+  background-color: #218838;
+}
