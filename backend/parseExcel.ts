@@ -19,6 +19,7 @@ interface Client {
   dayOfCleaning: string;
   timeOfCleaning: string;
   specialRequest: string;
+  phone: string;
   typeClean: boolean;
   team: string;
 }
@@ -104,7 +105,8 @@ export function parseWorkbook(workbook: XLSX.WorkBook) {
           dayOfCleaning: excelSerialToJSDate(excelDate),
           timeOfCleaning: excelTimeFractionToHHMM(excelTime),
           specialRequest: String(row[13] ?? "").trim(),
-          typeClean: Boolean(row[14]),
+          phone: String(row[14] ?? "").trim(),
+          typeClean: Boolean(row[15]),
           team: sheetName,
         });
       }

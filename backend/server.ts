@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
 
 dotenv.config();
 const app = express();
@@ -48,15 +49,6 @@ app.post('/signup', async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        const [rows] = await pool.query<RowDataPacket[]>(
-          "SELECT * FROM administrator WHERE email = ?",
-          [email]
-        );
-
-        if (rows.length !== 0) {
-          return res.status(401).json({ message: "This email is already being used" });
-        }
 
         // Insert admin and get ID
         const [adminResult]: any = await pool.query(
@@ -196,8 +188,8 @@ app.post("/upload-xlsx", authMiddleware, upload.single("file"), async (req: any,
         const teamID = teamMap[client.team];
         await connection.query(
           `INSERT INTO client 
-            (name, address, cleaningValue, houseSize, paymentMethod, dayOfCleaning, timeOfCleaning, specialRequest, typeClean, teamID) 
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            (name, address, cleaningValue, houseSize, paymentMethod, dayOfCleaning, timeOfCleaning, specialRequest, typeClean, phoneNumber, teamID) 
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             client.name,
             client.address,
@@ -208,6 +200,7 @@ app.post("/upload-xlsx", authMiddleware, upload.single("file"), async (req: any,
             client.timeOfCleaning,
             client.specialRequest,
             client.typeClean,
+            client.phone,
             teamID
           ]
         );
@@ -215,7 +208,7 @@ app.post("/upload-xlsx", authMiddleware, upload.single("file"), async (req: any,
 
       await connection.commit();
       connection.release();
-
+      
       res.json({ message: "File processed and data saved successfully" });
     } catch (err) {
       await connection.rollback();
@@ -226,6 +219,50 @@ app.post("/upload-xlsx", authMiddleware, upload.single("file"), async (req: any,
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to process Excel file" });
+  }
+});
+
+// Get Clients Endpoint
+app.post('/getClients', authMiddleware, async (req: any, res) => {
+    const teamID = req.body.teamID;
+
+    try {
+        const [clients] = await pool.execute(
+          "SELECT name, phoneNumber FROM client WHERE teamID = ?",
+          [teamID]
+        );
+
+        res.json({ clients });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Database error" });
+    }
+});
+
+// Get Teams Endpoint
+app.get('/getTeams', authMiddleware, async (req: any, res) => {
+  const adminID = req.user.adminID;
+
+  try {
+    const [companyRows] = await pool.query<any[]>(
+      "SELECT companyID FROM company WHERE adminID = ?",
+      [adminID]
+    );
+
+    if (companyRows.length === 0)
+      return res.status(404).json({ message: "Company not found for this user" });
+
+    const companyID = companyRows[0].companyID;
+
+    const [teams] = await pool.execute(
+      "SELECT teamID, name FROM team WHERE companyID = ?",
+      [companyID]
+    );
+
+    res.json({ teams });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Database error" });
   }
 });
 
