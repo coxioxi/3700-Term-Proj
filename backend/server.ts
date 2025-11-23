@@ -228,7 +228,7 @@ app.post('/getClients', authMiddleware, async (req: any, res) => {
 
     try {
         const [clients] = await pool.execute(
-          "SELECT name, phoneNumber FROM client WHERE teamID = ?",
+          "SELECT name, phoneNumber, dayOfCleaning, timeOfCleaning, typeClean, paymentMethod, houseSize, cleaningValue, address, specialRequest FROM client WHERE teamID = ?",
           [teamID]
         );
 

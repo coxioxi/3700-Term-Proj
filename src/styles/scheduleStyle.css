@@ -1,4 +1,4 @@
-/* ================= Overall Page Layout ================= */
+/* Overall Page Layout */
 .schedule-page {
   display: flex;
   height: 100vh;
@@ -9,7 +9,7 @@
   color: #fff;
 }
 
-/* ================= Left Section: Schedule View ================= */
+/* Schedule View */
 .schedule-view {
   flex: 3;
   display: flex;
@@ -81,12 +81,11 @@
 
 /* Highlight cells with scheduled clients */
 .weekly-schedule td:not(:first-child):not(:empty) {
-  background-color: #28a745;
   color: #fff;
   font-weight: bold;
 }
 
-/* ================= Right Section: Client Checklist ================= */
+/* Client Checklist */
 .client-checklist {
   flex: 1;
   border: 1px solid #333;
@@ -159,3 +158,68 @@
 .client-checklist button:hover {
   background-color: #218838;
 }
+
+.calendar-cell {
+  padding: 4px;
+  vertical-align: top;
+}
+
+.client-card {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+.client-card:hover {
+  background-color: #357bcc;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-window {
+  background: #333;
+  padding: 20px;
+  width: 350px;
+  border-radius: 10px;
+  position: relative;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.client-card:hover {
+  background: #3573b1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
