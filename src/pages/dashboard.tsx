@@ -5,11 +5,12 @@ import '../styles/Home_Page.css';
 // Import the separate page components
 import ViewSchedule from "./view-schedule";
 import Finances from "./finances";
+import Navigation from "./navigation-View";
 import type React from "react";
 
 export default function Dashboard() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [activePage, setActivePage] = useState< "view" | "finances">("view");
+  const [activePage, setActivePage] = useState< "view" | "finances" | "navigation" >("view");
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -82,12 +83,12 @@ export default function Dashboard() {
       return <ViewSchedule selectedFile={fileName !== "No file chosen" ? fileName : null} />;
     case "finances":
       return <Finances />;
+    case "navigation":
+      return <Navigation />;
     default:
       return null;
   }
 };
-
-
   return (
     <div className="dashboard-container">
       {/* Top Navbar */}
@@ -111,6 +112,9 @@ export default function Dashboard() {
           </button>
           <button onClick={() => setActivePage("finances")} className={activePage === "finances" ? "active" : ""}>
             Finances
+          </button>
+          <button onClick={() => setActivePage("navigation")} className={activePage === "navigation" ? "active" : ""}>
+            Navigation
           </button>
         </div>
         <div className="profile-menu" ref={menuRef}>

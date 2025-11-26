@@ -77,8 +77,6 @@ export default function Finances() {
 
   return (
   <div className="finance-container">
-    <h2>Finances</h2>
-
     {/* Dropdown */}
     <label>
       Select View:{" "}
