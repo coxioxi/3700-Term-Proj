@@ -2,14 +2,14 @@
 .finance-container {
   padding: 20px;
   font-family: Arial, sans-serif;
-  color: #333;
+  color: #ffffff;
 }
 
 /* Header */
 .finance-container h2 {
   margin-bottom: 20px;
   font-size: 28px;
-  color: #222;
+  color: #ffffff;
 }
 
 /* Dropdown */
@@ -24,7 +24,7 @@
   padding: 5px 10px;
   font-size: 16px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #ffffff;
 }
 
 /* Finance table */
@@ -43,19 +43,19 @@
 }
 
 .finance-table th {
-  background-color: #f0f0f0;
+  background-color: #000000;
   font-weight: bold;
 }
 
 /* Company totals row */
 .finance-table tfoot td {
   font-weight: bold;
-  background-color: #e8f0fe;
+  background-color: #000000;
 }
 
 /* Zebra striping for rows */
 .finance-table tbody tr:nth-child(even) {
-  background-color: #fafafa;
+  background-color: #000000;
 }
 
 /* Responsive */
