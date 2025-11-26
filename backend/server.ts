@@ -163,8 +163,8 @@ app.post("/upload-xlsx", authMiddleware, upload.single("file"), async (req: any,
       for (const emp of employees) {
         if (!teamMap[emp.team]) {
           const [teamResult]: any = await connection.query(
-            "INSERT INTO team (name, companyID) VALUES (?, ?)",
-            [emp.team, companyID]
+            "INSERT INTO team (name, companyID, expenses) VALUES (?, ?, ?)",
+            [emp.team, companyID, emp.teamExpense || null]
           );
           teamMap[emp.team] = teamResult.insertId;
         }
@@ -263,6 +263,75 @@ app.get('/getTeams', authMiddleware, async (req: any, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Database error" });
+  }
+});
+
+app.get("/finance-report", authMiddleware, async (req: any, res) => {
+  try {
+    const adminID = req.user.adminID;
+
+    // Get companyID from adminID
+    const [companyRows] = await pool.query<RowDataPacket[]>(
+      "SELECT companyID FROM company WHERE adminID = ?",
+      [adminID]
+    );
+
+    if (companyRows.length === 0) 
+      return res.status(404).json({ success: false, message: "Company not found for this user" });
+
+    const companyID = companyRows[0].companyID;
+
+    // Query all teams of this company
+    const [rows] = await pool.query<RowDataPacket[]>(
+      `
+      SELECT 
+          t.teamID,
+          t.name AS teamName,
+          t.expenses AS totalExpenses,
+          COALESCE(SUM(e.hoursWorked * e.payRate), 0) AS totalEmployeePay,
+          (
+              SELECT COALESCE(SUM(c.cleaningValue), 0)
+              FROM client c
+              WHERE c.teamID = t.teamID
+          ) AS totalRevenue
+      FROM team t
+      LEFT JOIN employee e ON e.teamID = t.teamID
+      WHERE t.companyID = ?
+      GROUP BY t.teamID;
+      `,
+      [companyID]
+    );
+
+    const teamsWithProfit = (rows as any[]).map((team) => {
+      const profit = team.totalRevenue - team.totalEmployeePay - team.totalExpenses;
+      return {
+        teamID: team.teamID,
+        teamName: team.teamName,
+        revenue: team.totalRevenue,
+        payroll: team.totalEmployeePay,
+        expenses: team.totalExpenses,
+        profit,
+      };
+    });
+
+    const company = {
+      totalRevenue: teamsWithProfit.reduce((sum, t) => sum + t.revenue, 0),
+      totalPayroll: teamsWithProfit.reduce((sum, t) => sum + t.payroll, 0),
+      totalExpenses: teamsWithProfit.reduce((sum, t) => sum + t.expenses, 0),
+      totalProfit: teamsWithProfit.reduce((sum, t) => sum + t.profit, 0),
+    };
+
+    res.json({
+      success: true,
+      teams: teamsWithProfit,
+      company,
+    });
+  } catch (err) {
+    console.error("Finance report error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch finance report",
+    });
   }
 });
 

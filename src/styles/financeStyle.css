@@ -1,0 +1,74 @@
+/* Container */
+.finance-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Header */
+.finance-container h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #222;
+}
+
+/* Dropdown */
+.finance-container label {
+  display: block;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.finance-container select {
+  margin-left: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Finance table */
+.finance-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 40px;
+}
+
+.finance-table th,
+.finance-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+.finance-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+/* Company totals row */
+.finance-table tfoot td {
+  font-weight: bold;
+  background-color: #e8f0fe;
+}
+
+/* Zebra striping for rows */
+.finance-table tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .finance-container select {
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 0;
+  }
+
+  .finance-table th,
+  .finance-table td {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+}

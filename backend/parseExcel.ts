@@ -7,6 +7,7 @@ interface Employee {
   payRate: number;
   role: string;
   hoursWorked: number;
+  teamExpense?: string;
   team: string;
 }
 
@@ -25,7 +26,7 @@ interface Client {
 }
 
 /**
- * Convert Excel date serial number → ISO date
+ * Convert Excel date serial number -> ISO date
  */
 function excelSerialToJSDate(serial: number): string {
   if (!serial || typeof serial !== "number") return "";
@@ -33,7 +34,7 @@ function excelSerialToJSDate(serial: number): string {
   const excelEpoch = new Date(Date.UTC(1899, 11, 30));
   const jsDate = new Date(excelEpoch.getTime() + serial * 86400 * 1000);
 
-  // Format as YYYY-MM-DD (local-safe because we use UTC fields)
+  // Format as YYYY-MM-DD
   const year = jsDate.getUTCFullYear();
   const month = (jsDate.getUTCMonth() + 1).toString().padStart(2, "0");
   const day = jsDate.getUTCDate().toString().padStart(2, "0");
@@ -43,7 +44,7 @@ function excelSerialToJSDate(serial: number): string {
 
 
 /**
- * Convert Excel time fraction (e.g. 0.5 → "12:00")
+ * Convert Excel time fraction -> HH:MM format
  */
 function excelTimeFractionToHHMM(serial: number): string {
   if (!serial || typeof serial !== "number") return "";
@@ -83,6 +84,7 @@ export function parseWorkbook(workbook: XLSX.WorkBook) {
           payRate: Number(row[3] ?? 0),
           role: String(row[4] ?? "").trim(),
           hoursWorked: Number(row[5] ?? 0),
+          teamExpense: String(row[16] ?? "").trim() || undefined,
           team: sheetName,
         };
 
