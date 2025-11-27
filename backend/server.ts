@@ -266,6 +266,58 @@ app.get('/getTeams', authMiddleware, async (req: any, res) => {
   }
 });
 
+// GET clients by team and day
+// GET clients by team and day
+app.get("/getClientsByTeamAndDay", authMiddleware, async (req: any, res) => {
+  try {
+    const adminID = req.user.adminID; // retrieved from token
+    const { teamID, day } = req.query;
+
+    if (!teamID || !day) {
+      return res.status(400).json({ success: false, message: "teamID and day are required" });
+    }
+
+    // Get company ID from adminID
+    const [companyRows] = await pool.query<any[]>(
+      "SELECT companyID FROM company WHERE adminID = ?",
+      [adminID]
+    );
+
+    if (companyRows.length === 0) {
+      return res.status(404).json({ success: false, message: "Company not found for this admin" });
+    }
+
+    const companyID = companyRows[0].companyID;
+
+    // Verify team belongs to this company
+    const [teamRows] = await pool.query<any[]>(
+      "SELECT * FROM team WHERE teamID = ? AND companyID = ?",
+      [teamID, companyID]
+    );
+
+    if (teamRows.length === 0) {
+      return res.status(404).json({ success: false, message: "Team not found for this admin's company" });
+    }
+
+    // Get clients for the team on the selected day using DAYNAME()
+    const [clients] = await pool.query<any[]>(
+      `
+      SELECT clientID, name, address, timeOfCleaning, dayOfCleaning, cleaningValue
+      FROM client
+      WHERE teamID = ? AND DAYNAME(dayOfCleaning) = ?
+      ORDER BY timeOfCleaning ASC
+      `,
+      [teamID, day]
+    );
+
+    res.json({ success: true, clients });
+  } catch (err) {
+    console.error("Error fetching clients by team and day:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch clients" });
+  }
+});
+
+// Finance Report Endpoint
 app.get("/finance-report", authMiddleware, async (req: any, res) => {
   try {
     const adminID = req.user.adminID;
