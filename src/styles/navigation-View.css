@@ -1,0 +1,110 @@
+/* Root layout */
+.navigation-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #ffffff;
+}
+
+/* Selector row */
+.selector {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.selector label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.selector select {
+  padding: 6px 12px;
+  border: 1.5px solid #ffffff;
+  border-radius: 6px;
+  background: rgb(0, 0, 0);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.selector select:hover {
+  border-color: #ffffff;
+}
+
+.selector select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0px 0px 3px rgba(0, 123, 255, 0.4);
+}
+
+/* Client list container */
+.clients-list {
+  background: #000000;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.clients-list h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.clients-list p {
+  margin: 0.5rem 0;
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+/* Clients list items */
+.clients-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.clients-list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #ffffff;
+  font-size: 1.5rem;
+}
+
+.clients-list li:last-child {
+  border-bottom: none;
+}
+
+/* Map container */
+.map-container {
+  border-radius: 8px;
+  height: 400px !important;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid #ffffff;
+}
+
+/* Total time display */
+.navigation-view > p {
+  font-size: 1rem;
+  background: #000000;
+  padding: 0.6rem 0.8rem;
+  border-left: 4px solid #ffffff;
+  border-radius: 4px;
+  max-width: max-content;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .selector {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .clients-list {
+    font-size: 0.9rem;
+  }
+}

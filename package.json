@@ -11,6 +11,7 @@
     "start:server": "ts-node backend/server.ts"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^2.0.2",
     "@supabase/supabase-js": "^2.78.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",

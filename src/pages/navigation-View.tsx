@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
+import "../styles/navigation-View.css";
 
 interface Team {
   teamID: number;
@@ -25,30 +27,26 @@ export default function Navigation() {
 
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-  // Load Google Maps script
-  function loadGoogleMaps() {
-    return new Promise<void>((resolve) => {
-      if (window.google) {
-        resolve();
-        return;
-      }
+  // Load Google Maps using API
+  async function loadGoogleMaps() {
+  setOptions({
+    key: import.meta.env.VITE_MAPS_API_KEY
+  });
 
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.MAPS_API_KEY}`;
-      script.async = true;
+  const { Map } = await importLibrary("maps");
+  const { DirectionsService, DirectionsRenderer } = await importLibrary("routes");
 
-      script.onload = () => resolve();
-      document.body.appendChild(script);
-    });
-  }
+  return { Map, DirectionsService, DirectionsRenderer };
+}
 
-  // Fetch teams on mount
+  // Fetch Teams
   async function fetchTeams() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch("http://localhost:5000/getTeams", {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       const data = await res.json();
       setTeams(data.teams);
     } catch (err) {
@@ -56,12 +54,30 @@ export default function Navigation() {
     }
   }
 
+  // load Google Maps and Teams
   useEffect(() => {
-    fetchTeams();
-    loadGoogleMaps();
+    async function init() {
+      await loadGoogleMaps();
+
+      const { Map, DirectionsService, DirectionsRenderer } = await loadGoogleMaps();
+
+      if (mapRef.current) {
+        map.current = new Map(mapRef.current, {
+          zoom: 10,
+          center: { lat: 40.0, lng: -82.9 },
+        });
+
+        directionsService.current = new DirectionsService();
+        directionsRenderer.current = new DirectionsRenderer({ map: map.current });
+      }
+
+      fetchTeams();
+    }
+
+    init();
   }, []);
 
-  // Fetch clients when team/day change
+  // Fetch Clients when team/day change
   useEffect(() => {
     async function fetchClients() {
       if (!selectedTeam || !selectedDay) {
@@ -96,23 +112,12 @@ export default function Navigation() {
     fetchClients();
   }, [selectedTeam, selectedDay, teams]);
 
-  // Render route whenever the client list changes
+  // Update Route on Client List Change
   useEffect(() => {
-    if (!window.google) return;
-    if (!mapRef.current) return;
-
-    if (!map.current) {
-      map.current = new google.maps.Map(mapRef.current, {
-        zoom: 10,
-        center: { lat: 40.0, lng: -82.9 }, // can adjust
-      });
-
-      directionsService.current = new google.maps.DirectionsService();
-      directionsRenderer.current = new google.maps.DirectionsRenderer({ map: map.current });
-    }
+    if (!map.current || !directionsService.current || !directionsRenderer.current) return;
 
     if (clients.length < 2) {
-      directionsRenderer.current?.setDirections({ routes: [] });
+      directionsRenderer.current.setDirections(null as unknown as google.maps.DirectionsResult);
       setTotalTime("");
       return;
     }
@@ -123,12 +128,13 @@ export default function Navigation() {
 
     const origin = sorted[0].address;
     const destination = sorted[sorted.length - 1].address;
+
     const waypoints =
       sorted.length > 2
         ? sorted.slice(1, -1).map((c) => ({ location: c.address, stopover: true }))
         : [];
 
-    directionsService.current!.route(
+    directionsService.current.route(
       {
         origin,
         destination,
@@ -186,6 +192,7 @@ export default function Navigation() {
         <h3>
           Clients for {selectedTeam} on {selectedDay}
         </h3>
+
         {clients.length === 0 ? (
           <p>No clients scheduled.</p>
         ) : (
@@ -199,18 +206,22 @@ export default function Navigation() {
         )}
       </div>
 
-      {/* Total Travel Time */}
+      {/* Total Time */}
       {totalTime && (
-        <p style={{ marginTop: "0.5rem", fontWeight: "bold" }}>
+        <p style={{ marginBottom: "0.5 rem", fontWeight: "bold" }}>
           Total Estimated Travel Time: {totalTime}
         </p>
       )}
 
-      {/* Google Map */}
+      {/* Map */}
       <div
         ref={mapRef}
         className="map-container"
-        style={{ marginTop: "1rem", height: "400px", border: "1px solid #ccc" }}
+        style={{
+          marginTop: "1rem",
+          height: "400px",
+          border: "1px solid #ccc",
+        }}
       />
     </div>
   );
