@@ -25,6 +25,7 @@ A full-stack web application designed to help cleaning service companies manage 
 <p align="center">
 Dashboard Overview: <br/>
 <i>Displays the main schedule view with organized cleaning appointments per client.</i>
+  <img src="https://github.com/coxioxi/3700-Term-Proj/blob/main/4.PNG">
 <br />
 <br />
 Financial Summary Page: <br/>
