@@ -8,8 +8,6 @@ import dotenv from 'dotenv';
 import multer from 'multer';
 import XLSX from 'xlsx';
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
-import path from 'path';
 
 dotenv.config();
 const app = express();
@@ -35,9 +33,9 @@ function authMiddleware(req: any, res: any, next: any) {
 // MySQL connection
 const pool = mysql.createPool({
     host: 'localhost',
-    user: 'comp3700',
+    user: 'samuel',
     password: process.env.DB_PASSWORD,
-    database: 'comp3700'
+    database: 'CleaningCompany'
 });
 
 // Signup Endpoint 
@@ -428,14 +426,6 @@ app.post('/reset-password', async (req, res) => {
         console.error(err);
         res.status(500).json({ message: "Server error" });
     }
-});
-
-// Serve React static files
-app.use(express.static(path.join(__dirname, '../dist')));
-
-// Catch-all route for React Router
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 // Start server
