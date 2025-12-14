@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+<h1>Online Schedule Management System</h1>
 
 <h2>Description</h2>
 A full-stack web application designed to help cleaning service companies manage their schedules more efficiently. The system allows administrators to upload Excel (XLSX) files containing client and service data, which are then processed and displayed in a structured and user-friendly agenda view. The application provides clear visualization of cleaning dates and time slots per client, along with a financial summary dashboard showing company-wide expenses and profits. Additionally, the system integrates with the Google Maps API to estimate and display travel time between client locations, supporting better route planning and time management. User authentication and authorization are implemented using JWT to securely protect backend endpoints and ensure controlled access to data stored in a MySQL database.
