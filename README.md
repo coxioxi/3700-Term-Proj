@@ -24,6 +24,7 @@ A full-stack web application designed to help cleaning service companies manage 
 
 <p align="center">
 Dashboard Overview: <br/>
+<img src="https://imgur.com/a/SMrmdX0" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <i>Displays the main schedule view with organized cleaning appointments per client.</i>
 <br />
 <br />
