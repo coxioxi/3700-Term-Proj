@@ -1,73 +1,37 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<h2>Description</h2>
+A full-stack web application designed to help cleaning service companies manage their schedules more efficiently. The system allows administrators to upload Excel (XLSX) files containing client and service data, which are then processed and displayed in a structured and user-friendly agenda view. The application provides clear visualization of cleaning dates and time slots per client, along with a financial summary dashboard showing company-wide expenses and profits. Additionally, the system integrates with the Google Maps API to estimate and display travel time between client locations, supporting better route planning and time management. User authentication and authorization are implemented using JWT to securely protect backend endpoints and ensure controlled access to data stored in a MySQL database.
+<br />
 
-Currently, two official plugins are available:
+<h2>Languages and Utilities Used</h2>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- <b>TypeScript</b>
+- <b>JavaScript</b>
+- <b>React</b>
+- <b>Node.js</b>
+- <b>Express</b>
+- <b>Vite</b>
+- <b>MySQL</b>
+- <b>JWT</b>
+- <b>Google Maps API</b>
 
-## React Compiler
+<h2>Environments Used</h2>
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- <b>Windows 10/11</b>
 
-## Expanding the ESLint configuration
+<h2>Program Walk-through</h2>
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+<p align="center">
+Dashboard Overview: <br/>
+<i>Displays the main schedule view with organized cleaning appointments per client.</i>
+<br />
+<br />
+Financial Summary Page: <br/>
+<i>Shows aggregated company expenses and profit data.</i>
+<br />
+<br />
+Route & Travel Time Estimation: <br/>
+<i>Uses Google Maps API to calculate travel time between client addresses.</i>
+<br />
+</p>
