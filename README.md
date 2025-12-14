@@ -25,14 +25,16 @@ A full-stack web application designed to help cleaning service companies manage 
 <p align="center">
 Dashboard Overview: <br/>
 <i>Displays the main schedule view with organized cleaning appointments per client.</i>
-  <img src="https://github.com/coxioxi/3700-Term-Proj/blob/main/4.PNG">
+  <img src="https://github.com/coxioxi/3700-Term-Proj/blob/main/Capture.PNG">
 <br />
 <br />
 Financial Summary Page: <br/>
 <i>Shows aggregated company expenses and profit data.</i>
+   <img src="https://github.com/coxioxi/3700-Term-Proj/blob/main/1.PNG">
 <br />
 <br />
 Route & Travel Time Estimation: <br/>
 <i>Uses Google Maps API to calculate travel time between client addresses.</i>
+  <img src="https://github.com/coxioxi/3700-Term-Proj/blob/main/2.PNG">
 <br />
 </p>
