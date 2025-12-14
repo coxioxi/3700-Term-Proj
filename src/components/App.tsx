@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Import your pages
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Dashboard from "../pages/dashboard";
@@ -10,7 +9,7 @@ import Navigation from "../pages/navigation-View";
 
 export default function App() {
   return (
-    <Router>
+    <Router basename="/costa/Schedule_Manager">
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
@@ -23,3 +22,4 @@ export default function App() {
     </Router>
   );
 }
+

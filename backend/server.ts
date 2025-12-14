@@ -9,6 +9,7 @@ import multer from 'multer';
 import XLSX from 'xlsx';
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 const app = express();
@@ -26,17 +27,17 @@ function authMiddleware(req: any, res: any, next: any) {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!, (err: any, user: any) => {
     if (err) return res.status(403).json({ message: "Invalid or expired token" });
-    req.user = user; // attaches decoded token to request
+    req.user = user; // attach decoded token to request
     next();
   });
 }
 
-// MySQL connection pool
+// MySQL connection
 const pool = mysql.createPool({
     host: 'localhost',
-    user: 'samuel',
+    user: 'comp3700',
     password: process.env.DB_PASSWORD,
-    database: 'CleaningCompany'
+    database: 'comp3700'
 });
 
 // Signup Endpoint 
@@ -103,7 +104,7 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Create a JWT with ONLY SAFE FIELDS
+    // Create a JWT
     const payload = {
       adminID: user.adminID,
       username: user.name,
@@ -267,7 +268,6 @@ app.get('/getTeams', authMiddleware, async (req: any, res) => {
 });
 
 // GET clients by team and day
-// GET clients by team and day
 app.get("/getClientsByTeamAndDay", authMiddleware, async (req: any, res) => {
   try {
     const adminID = req.user.adminID; // retrieved from token
@@ -299,7 +299,7 @@ app.get("/getClientsByTeamAndDay", authMiddleware, async (req: any, res) => {
       return res.status(404).json({ success: false, message: "Team not found for this admin's company" });
     }
 
-    // Get clients for the team on the selected day using DAYNAME()
+    // Get clients for the team on the selected day
     const [clients] = await pool.query<any[]>(
       `
       SELECT clientID, name, address, timeOfCleaning, dayOfCleaning, cleaningValue
@@ -428,6 +428,14 @@ app.post('/reset-password', async (req, res) => {
         console.error(err);
         res.status(500).json({ message: "Server error" });
     }
+});
+
+// Serve React static files
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// Catch-all route for React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 // Start server

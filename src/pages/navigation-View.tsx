@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import "../styles/navigation-View.css";
 

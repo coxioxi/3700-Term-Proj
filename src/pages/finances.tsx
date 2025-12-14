@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import '../styles/financeStyle.css';
 
 type TeamFinance = {
@@ -60,7 +60,7 @@ export default function Finances() {
 
   const { teams, company } = financeData;
 
-  /** Decide what data to show based on dropdown */
+  // Decide what data to show based on dropdown
   let displayedTeams: TeamFinance[] = [];
   let showCompanyTotals = false;
 
